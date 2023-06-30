@@ -33,6 +33,9 @@ def savings(gross_pay, tax_rate, expenses):
     '''
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
+
+    import math
+    
     tax_amount = math.floor(gross_pay * tax_rate)
 
     after_tax_pay = gross_pay - tax_amount
@@ -111,6 +114,9 @@ def interest(principal, rate, periods):
     '''
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
+ 
+    import math
+
     interest = principal * rate * periods
 
     final_value = principal + interest
