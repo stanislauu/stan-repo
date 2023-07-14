@@ -42,15 +42,18 @@ def relationship_status(from_member, to_member, social_graph):
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
 
-    if from_member in social_graph.get(to_member, []):
-        if to_member in social_graph.get(from_member, []):
+    if from_member in social_graph and to_member in social_graph:
+        from_member_following = social_graph[from_member]["following"]
+        to_member_following = social_graph[to_member]["following"]
+
+        if from_member in to_member_following and to_member in from_member_following:
             return "friends"
-        else:
+        elif from_member in to_member_following:
             return "followed by"
-    elif to_member in social_graph.get(from_member, []):
-        return "follower"
-    else:
-        return "no relationship"
+        elif to_member in from_member_following:
+            return "follower"
+
+    return "no relationship"
 
 
 
@@ -131,13 +134,36 @@ def eta(first_stop, second_stop, route_map):
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
 
+def eta(first_stop, second_stop, route_map):
     current_stop = first_stop
     time = 0
 
     while current_stop != second_stop:
-        next_stop = route_map[current_stop]
-        time += next_stop[1]
-        current_stop = next_stop[0]
+        if (current_stop, second_stop) in route_map:
+            time += route_map[(current_stop, second_stop)]["travel_time_mins"]
+            current_stop = second_stop
+        elif (second_stop, current_stop) in route_map:
+            time += route_map[(second_stop, current_stop)]["travel_time_mins"]
+            current_stop = second_stop
+        else:
+            next_stop = route_map[current_stop]["next_stop"]
+            time += route_map[(current_stop, next_stop)]["travel_time_mins"]
+            current_stop = next_stop
 
     return time
+
+route_map = {
+    ("upd", "admu"): {
+        "travel_time_mins": 10
+    },
+    ("admu", "dlsu"): {
+        "travel_time_mins": 35
+    },
+    ("dlsu", "upd"): {
+        "travel_time_mins": 55
+    }
+}
+
+print(eta("upd", "dlsu", route_map))  # Output: 100
+
 
