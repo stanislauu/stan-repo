@@ -134,36 +134,24 @@ def eta(first_stop, second_stop, route_map):
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
 
-def eta(first_stop, second_stop, route_map):
-    current_stop = first_stop
-    time = 0
-
-    while current_stop != second_stop:
-        if (current_stop, second_stop) in route_map:
-            time += route_map[(current_stop, second_stop)]["travel_time_mins"]
-            current_stop = second_stop
-        elif (second_stop, current_stop) in route_map:
-            time += route_map[(second_stop, current_stop)]["travel_time_mins"]
-            current_stop = second_stop
-        else:
-            next_stop = route_map[current_stop]["next_stop"]
-            time += route_map[(current_stop, next_stop)]["travel_time_mins"]
-            current_stop = next_stop
-
-    return time
-
-route_map = {
-    ("upd", "admu"): {
-        "travel_time_mins": 10
-    },
-    ("admu", "dlsu"): {
-        "travel_time_mins": 35
-    },
-    ("dlsu", "upd"): {
-        "travel_time_mins": 55
-    }
-}
-
-print(eta("upd", "dlsu", route_map))  # Output: 100
+    if first_stop==second_stop:
+        return 0
+    
+    total_travel = 0
+    for leg, info in route_map.items():
+        fr_stop, to_stop = leg
+        travel_time = info['travel_time_mins']
+        
+        if fr_stop == first_stop:
+            total_travel += travel_time
+            if to_stop == second_stop:
+                return total_travel
+            else:
+                remaining_time = eta(to_stop, second_stop, route_map)
+                if remaining_time is not None:
+                    return total_travel + remaining_time
+    
+    
+    return None
 
 
